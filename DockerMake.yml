@@ -1,0 +1,40 @@
+devbase:
+ FROM: gliderlabs/alpine:3.3
+ build: |
+  RUN apk add --update \
+      ca-certificates curl wget make bash
+python:
+ requires:
+  - devbase
+ build: |
+   RUN apk add --update python \
+      python-dev \
+      py-pip \
+    && pip install virtualenv \
+    && rm -rf /var/cache/apk/*
+awscli:
+  requires:
+    - python
+  build: |
+    RUN pip install awscli
+    COPY aws_bash_helpers.sh /etc/profile.d/
+  build_directory: build/aws
+terraform:
+  requires:
+    - devbase
+  build: |
+    ARG TERRAFORM_VERSION=0.7.0
+    RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+        unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
+        rm -rf /tmp/* && \
+        rm -rf /var/tmp/*
+cloud-workstation:
+  requires:
+    - awscli
+    - terraform
+
+# TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
+  build: |
+    RUN apk update && apk upgrade && apk add --no-cache bash git
+    WORKDIR /workspace
+    CMD /bin/bash
