@@ -2,7 +2,7 @@ devbase:
  FROM: gliderlabs/alpine:3.3
  build: |
   RUN apk add --update \
-      ca-certificates curl wget make bash
+      ca-certificates curl wget make bash openssh-client
 python:
  requires:
   - devbase
@@ -23,7 +23,7 @@ terraform:
   requires:
     - devbase
   build: |
-    ARG TERRAFORM_VERSION=0.7.0
+    ARG TERRAFORM_VERSION=0.7.1
     RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
         unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
         rm -rf /tmp/* && \
@@ -32,7 +32,6 @@ cloud-workstation:
   requires:
     - awscli
     - terraform
-
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
   build: |
     RUN apk update && apk upgrade && apk add --no-cache bash git
