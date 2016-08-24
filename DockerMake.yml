@@ -17,7 +17,7 @@ awscli:
     - python
   build: |
     RUN pip install awscli
-    COPY aws_bash_helpers.sh /etc/profile.d/
+    COPY aws_bash_helpers.sh /root/.bashrc
   build_directory: build/aws
 terraform:
   requires:
