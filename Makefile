@@ -1,14 +1,20 @@
 
 REMOTE_NAME ?= genesysarch/cloud-workstation
-image:
-	./docker-make.sh cloud-workstation
 
+.PHONY: image push
 
-push:
+all: image
+
+image: Dockerfile
+	docker build -t cloud-workstation .
+
+tag:
 	docker tag cloud-workstation $(REMOTE_NAME)
+
+push: image
+	$(MAKE) tag
 	docker push $(REMOTE_NAME)
 
-dockerfile: Dockerfile
 
 Dockerfile: DockerMake.yml
 	./docker-make.sh -n cloud-workstation
