@@ -2,7 +2,8 @@ devbase:
  FROM: gliderlabs/alpine:3.3
  build: |
   RUN apk add --update \
-      ca-certificates curl wget make bash openssh-client
+      ca-certificates curl wget make bash openssh-client \
+      bash git sshpass
 python:
  requires:
   - devbase
@@ -11,14 +12,20 @@ python:
       python-dev \
       py-pip \
     && pip install virtualenv \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* \
+    && pip install --upgrade pip
 awscli:
   requires:
     - python
   build: |
     RUN pip install awscli
-    COPY aws_bash_helpers.sh /root/.bashrc
-  build_directory: build/aws
+    COPY build/aws/aws_bash_helpers.sh /root/.bashrc
+clitools:
+  requires:
+    - ansible
+  build: |
+    RUN pip install docopts
+    COPY ./build/scripts/* /usr/local/bin/
 terraform:
   requires:
     - devbase
@@ -55,8 +62,8 @@ cloud-workstation:
     - awscli
     - terraform
     - ansible
+    - clitools
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
   build: |
-    RUN apk add --no-cache bash git sshpass
     WORKDIR /workspace
     CMD /bin/bash
