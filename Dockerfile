@@ -54,6 +54,11 @@ RUN pip install docopts
 COPY ./build/scripts/* /usr/local/bin/
 
 
+#Commands for testing
+RUN git clone https://github.com/calj/bats.git && bats/install.sh /usr/local  \
+  && rm -rf bats
+
+
 #Commands for cloud-workstation
 WORKDIR /workspace
 CMD /bin/bash
