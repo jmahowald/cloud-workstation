@@ -1,5 +1,5 @@
 
-REMOTE_NAME ?= genesysarch/cloud-workstation
+REMOTE_NAME ?= joshmahowald/cloud-workstation
 
 .PHONY: image push
 

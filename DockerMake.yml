@@ -22,10 +22,10 @@ awscli:
     COPY build/aws/aws_bash_helpers.sh /root/.bashrc
 clitools:
   requires:
-    - ansible
+    - devbase
   build: |
-    RUN pip install docopts
-    COPY ./build/scripts/* /usr/local/bin/
+    COPY ./build/scripts/*  /usr/local/bin/ 
+    RUN pip install docopts && chmod 755 /usr/local/bin/*
 terraform:
   requires:
     - devbase
@@ -61,11 +61,13 @@ testing:
     RUN git clone https://github.com/calj/bats.git && bats/install.sh /usr/local  \
       && rm -rf bats
 
+travis:
+  build:
 cloud-workstation:
   requires:
     - awscli
     - terraform
-    - ansible
+    #- ansible
     - clitools
     - testing
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
