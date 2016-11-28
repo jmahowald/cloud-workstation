@@ -4,13 +4,13 @@ FROM gliderlabs/alpine:3.3
 
 
 #Commands for devbase
-RUN apk add --update \
+RUN apk add --update --no-cache \
     ca-certificates curl wget make bash openssh-client \
-    bash git sshpass
+    bash git sshpass rsync
 
 
 #Commands for python
-RUN apk add --update python \
+RUN apk add --update --no-cache python \
    python-dev \
    py-pip \
  && pip install virtualenv \
