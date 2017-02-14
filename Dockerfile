@@ -24,7 +24,7 @@ COPY build/aws/aws_bash_helpers.sh /root/.bashrc
 
 
 #Commands for terraform
-ARG TERRAFORM_VERSION=0.7.1
+ARG TERRAFORM_VERSION=0.8.6
 RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
     rm -rf /tmp/* && \
