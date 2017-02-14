@@ -2,6 +2,7 @@
 
 
 """awskey   A utility to help idempotently create a key pair in AWS leveraging make
+You are expected to supply your aws credentials through the CLI
 
 
 
