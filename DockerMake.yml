@@ -61,8 +61,14 @@ testing:
     RUN git clone https://github.com/calj/bats.git && bats/install.sh /usr/local  \
       && rm -rf bats
 
-travis:
-  build:
+dockerize:
+  build: |
+    ENV DOCKERIZE_VERSION v0.3.0
+    RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+      && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+      && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+
 cloud-workstation:
   requires:
     - awscli
@@ -70,6 +76,8 @@ cloud-workstation:
     #- ansible
     - clitools
     - testing
+    - dockerize
+
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
   build: |
     WORKDIR /workspace
