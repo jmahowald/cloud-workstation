@@ -24,13 +24,11 @@ COPY build/aws/aws_bash_helpers.sh /root/.bashrc
 
 
 #Commands for terraform
-ARG TERRAFORM_VERSION=0.8.6
-RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
+ARG TERRAFORM_VERSION=0.8.7.2.0
+RUN  wget -P /tmp   https://github.com/jmahowald/terraform/releases/download/v${TERRAFORM_VERSION}/linux_amd64.zip && \
+    unzip /tmp/linux_amd64.zip -d /usr/bin && \
     rm -rf /tmp/* && \
-    rm -rf /var/tmp/*
-RUN wget -P /tmp https://github.com/CiscoCloud/terraform.py/blob/master/terraform.py && \
-   mv /tmp/terraform.py /usr/local/bin && chmod 755 /usr/local/bin/terraform.py
+    rm -rf /var/tmp/* 
 
 
 #Commands for clitools
