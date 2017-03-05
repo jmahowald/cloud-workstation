@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+
+"""scaffolding   A homeless man's version of maven archetype.  
+Uses dockerize to process template directories and generate files for project types. 
+ For instance, will generate .travis.yml and 
+Jenkinsfile for docker projects
+
+
+Usage:
+  scaffolding docker [--registry=<registry>]  [--outdir=<dir>] <image> 
+
+Options:
+   -o --outdir=<dir>  where to put the generated files> [default: .]
+   -t --templatedir=<dir> where to load the templates from (ignores builtintype)
+   -r --registry=<reg> registry to upload to [default: hub.docker.com]
+Arguments:
+  image  the name of the image
+  registry the name of the remote registry
+
+"""
+
+from docopt import docopt
+
+import os 
+from subprocess import Popen, PIPE
+
+
+
+SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
+# For error outputs
+CRED = '\033[91m'
+
+def execute(cmd,env):
+  proc = Popen(cmd, env=env,stdout=PIPE, stderr=PIPE)
+  out,err = proc.communicate()
+  print out
+  if proc.returncode != 0: 
+    print CRED + "Error executing {cmd}".format(cmd=cmd) + "\n" + err
+
+
+
+if __name__ == '__main__':
+    opts = docopt(__doc__, version='scaffolding 1.0')
+    print(opts)
+    my_env = os.environ.copy()
+    my_env['IMAGE_NAME'] = opts['<image>']
+    if opts['--registry']:
+      my_env['DOCKER_REGISTRY']=opts['--registry']
+    outdir = opts['--outdir']
+    cmd = ['dockerize', "-template","/opt/cloud-workstation/templates/docker:%s" % outdir ] 
+    execute(cmd,my_env)
+
+
+    
+
