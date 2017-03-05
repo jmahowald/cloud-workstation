@@ -6,10 +6,10 @@ IMAGE_NAME ?= cloud-workstation
 all: image
 
 image: Dockerfile
-	docker build -t cloud-workstation .
+	docker build -t $(IMAGE_NAME)  .
 
 tag:
-	docker tag cloud-workstation $(REMOTE_NAME)
+	docker tag  $(IMAGE_NAME) $(REMOTE_NAME)
 
 push: image
 	$(MAKE) tag
