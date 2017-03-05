@@ -1,2 +1,5 @@
 docker_makefiles/
 dockerfile.fail
+.envrc
+.vscode
+test/
