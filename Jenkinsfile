@@ -5,8 +5,7 @@ node {
   stage 'checkout'
   checkout scm
 
-
-   imageName = 'infra/docker-cloud-workstation'
+   imageName = "infra/cloud-workstation"
    stage "build"
    withEnv(["DOCKER_TAG=${imageName}"]) {
      sh 'make'
