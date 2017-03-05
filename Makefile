@@ -1,6 +1,6 @@
 
 REMOTE_NAME ?= joshmahowald/cloud-workstation
-
+IMAGE_NAME ?= cloud-workstation
 .PHONY: image push
 
 all: image
