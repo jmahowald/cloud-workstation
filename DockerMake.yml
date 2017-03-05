@@ -50,7 +50,7 @@ ansible:
 
     RUN apk --no-cache add --update -t deps git gcc make musl-dev libxml2-dev \
         libxslt-dev openssl-dev libffi-dev
-    RUN pip install ansible
+    RUN pip install ansible ansible-vault
 
     RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inventory/releases/download/$TERRAFORM_INVENTORY_VERSION/terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
         && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
@@ -73,7 +73,7 @@ direnv:
   build: |
     ENV DIRENV_VERSION v2.11.3
     RUN wget -O direnv  https://github.com/direnv/direnv/releases/download/$DIRENV_VERSION/direnv.linux-amd64  https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-      && chmod 755 direnv && mv direnv /usr/local/bin    
+      && chmod 755 direnv && mv direnv /usr/local/bin 
     COPY build/direnv/direnv_helpers.sh /root/.bashrc
 
 
@@ -81,7 +81,7 @@ cloud-workstation:
   requires:
     - awscli
     - terraform
-    #- ansible
+    - ansible
     - testing
     - dockerize
     - direnv
