@@ -7,7 +7,7 @@ You are expected to supply your aws credentials through the CLI
 
 
 Usage:
-  awskey (create|delete)  [--dir=<keydirectory>] [--region=<region] <keyname>
+  awskey (create|delete)  [--dir=<keydirectory>] [--region=<region>] <keyname>
 
 Options:
    -d --dir=<keydirectory>   Directory to put keys in [default: ./keys]
@@ -15,8 +15,6 @@ Options:
 
 Arguments:
   keyname  name of the key
-
-
 
 """
 
