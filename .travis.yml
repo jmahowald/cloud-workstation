@@ -5,7 +5,7 @@ language: golang
 script:
 - set -e
 - export BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-- export IMAGE_NAME=infra/cloud-workstation
+- export IMAGE_NAME=cloud-workstation
 - make
 - "./docker-push.sh"
 before_install:
