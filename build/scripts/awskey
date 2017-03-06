@@ -28,6 +28,17 @@ from subprocess import Popen, PIPE
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 
+# For error outputs
+CRED = '\033[91m'
+
+def execute(cmd,env):
+  proc = Popen(cmd, env=env,stdout=PIPE, stderr=PIPE)
+  out,err = proc.communicate()
+  print out
+  if proc.returncode != 0: 
+    print CRED + "Error executing {cmd}".format(cmd=cmd) + "\n" + err
+
+
 if __name__ == '__main__':
     opts = docopt(__doc__, version='makeawskey 2.0')
     key = opts['<keyname>']
@@ -45,12 +56,7 @@ if __name__ == '__main__':
       maketarget = "delete-keypair"
 
     cmd = ['make', "-f","%s/keypair.mk" % script_path, maketarget   ] 
-    proc = Popen(cmd, env=my_env,stdout=PIPE, stderr=PIPE)
-    out,err = proc.communicate()
-
-    print "output:%s   err:err" % out,err
-    # print 'proc.'
-
+    execute(cmd,my_env)
 
     
 
