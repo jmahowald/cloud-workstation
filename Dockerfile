@@ -1,6 +1,6 @@
 #Build directory: None
 #tag: cloud-workstation
-FROM gliderlabs/alpine:3.3
+FROM artifactory.corp.code42.com:5000/gliderlabs/alpine:3.3
 
 
 #Commands for devbase
@@ -24,13 +24,11 @@ COPY build/aws/aws_bash_helpers.sh /root/.bashrc
 
 
 #Commands for terraform
-ARG TERRAFORM_VERSION=0.8.5
+ARG TERRAFORM_VERSION=0.9.6
 RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
-RUN wget -P /tmp https://github.com/CiscoCloud/terraform.py/blob/master/terraform.py && \
-   mv /tmp/terraform.py /usr/local/bin && chmod 755 /usr/local/bin/terraform.py
 
 
 #Commands for ansible
