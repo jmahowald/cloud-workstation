@@ -1,0 +1,27 @@
+---
+resources:
+- name: source-code-cloud-workstation
+  type: git
+  source:
+    password: code42pw
+    uri: https://stash.corp.code42.com/scm/cd/cloud-workstation.git
+    username: jenkins
+- name: container-image
+  type: docker-image
+  source:
+    password: surugved
+    repository: artifactory.corp.code42.com:5001/c42/cloud-workstation
+    username: devgurus
+jobs:
+- name: job-publish
+  public: true
+  serial: true
+  plan:
+  - get: source-code-cloud-workstation
+    trigger: true
+  - put: container-image
+    params:
+      build:  source-code-cloud-workstation/.
+
+
+      
