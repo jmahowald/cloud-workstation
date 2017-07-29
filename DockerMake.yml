@@ -76,7 +76,22 @@ direnv:
       && chmod 755 direnv && mv direnv /usr/local/bin 
     COPY build/direnv/direnv_helpers.sh /root/.bashrc
 
+kub:
+  build: |
+    ARG KUBECTL_VERSION=v1.6.2
+    ARG KOPS_VERSION=1.5.3
+    ADD https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+    RUN curl -O --location  --show-error https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64 \
+    && mv kops-linux-amd64 /usr/bin/kops \
+    && chmod +x /usr/bin/kops 
+    RUN curl -O --location  --show-error https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl \
+    && mv kubectl /usr/local/bin/kubectl && \
+    chmod +x /usr/local/bin/kubectl 
 
+kub-station:
+  requires:
+  - cloud-workstation
+  - kub
 cloud-workstation:
   requires:
     - awscli
@@ -86,6 +101,14 @@ cloud-workstation:
     - dockerize
     - direnv
     - clitools
+
+terraform-tools:
+  requires:
+    - awscli
+    - terraform
+    - dockerize
+    - direnv
+
 
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
   build: |

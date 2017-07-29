@@ -74,7 +74,5 @@ COPY ./build/templates /opt/cloud-workstation/templates
 RUN  chmod 755 /usr/local/bin/*
 
 
-#Commands for cloud-workstation
-WORKDIR /workspace
-CMD /bin/bash
+####end of requirements for cloud-workstation
 

@@ -19,3 +19,11 @@ push: image
 Dockerfile: DockerMake.yml
 	./docker-make.sh -n cloud-workstation
 	mv docker_makefiles/Dockerfile.cloud-workstation Dockerfile
+
+awscli: DockerMake.yml
+	./docker-make.sh -n awscli
+	docker build -t aws-cli -f docker_makefiles/Dockerfile.awscli  . 
+
+kub-station: DockerMake.yml
+	./docker-make.sh -n kub-station
+	docker build -t kub -f docker_makefiles/Dockerfile.kub-station  . 
