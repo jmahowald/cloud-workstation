@@ -6,7 +6,7 @@ FROM gliderlabs/alpine:3.3
 #Commands for devbase
 RUN apk add --update --no-cache \
     ca-certificates curl wget make bash openssh-client \
-    bash git sshpass rsync
+    bash git sshpass rsync jq
 
 
 #Commands for python
@@ -19,18 +19,16 @@ RUN apk add --update --no-cache python \
 
 
 #Commands for awscli
-RUN pip install awscli
+RUN pip install awscli 
 COPY build/aws/aws_bash_helpers.sh /root/.bashrc
 
 
 #Commands for terraform
-ARG TERRAFORM_VERSION=0.8.5
+ARG TERRAFORM_VERSION=0.9.11
 RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
-RUN wget -P /tmp https://github.com/CiscoCloud/terraform.py/blob/master/terraform.py && \
-   mv /tmp/terraform.py /usr/local/bin && chmod 755 /usr/local/bin/terraform.py
 
 
 #Commands for ansible
@@ -41,7 +39,7 @@ ENV ANSIBLE_LIBRARY /ansible/library
 
 RUN apk --no-cache add --update -t deps git gcc make musl-dev libxml2-dev \
     libxslt-dev openssl-dev libffi-dev
-RUN pip install ansible ansible-vault
+RUN pip install ansible ansible-vault awscurl
 
 RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inventory/releases/download/$TERRAFORM_INVENTORY_VERSION/terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
     && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
@@ -71,6 +69,7 @@ COPY build/direnv/direnv_helpers.sh /root/.bashrc
 #Commands for clitools
 COPY ./build/scripts/*  /usr/local/bin/ 
 COPY ./build/templates /opt/cloud-workstation/templates
+COPY ./build/scripts/assume_rolefunction.sh /root/.bashrc
 RUN  chmod 755 /usr/local/bin/*
 
 
