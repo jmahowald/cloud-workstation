@@ -3,7 +3,7 @@ devbase:
  build: |
   RUN apk add --update --no-cache \
       ca-certificates curl wget make bash openssh-client \
-      bash git sshpass rsync
+      bash git sshpass rsync jq
 python:
  requires:
   - devbase
@@ -31,7 +31,7 @@ terraform:
   requires:
     - devbase
   build: |
-    ARG TERRAFORM_VERSION=0.9.6
+    ARG TERRAFORM_VERSION=0.9.11
     RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
         unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
         rm -rf /tmp/* && \
@@ -48,7 +48,7 @@ ansible:
 
     RUN apk --no-cache add --update -t deps git gcc make musl-dev libxml2-dev \
         libxslt-dev openssl-dev libffi-dev
-    RUN pip install ansible ansible-vault
+    RUN pip install ansible ansible-vault awscurl molecule
 
     RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inventory/releases/download/$TERRAFORM_INVENTORY_VERSION/terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
         && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
@@ -79,13 +79,14 @@ cloud-workstation:
   requires:
     - awscli
     - terraform
-    - ansible
     - testing
     - dockerize
     - direnv
     - clitools
+    - ansible
 
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
   build: |
     WORKDIR /workspace
     CMD /bin/bash
+    RUN apk add docker

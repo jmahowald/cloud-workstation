@@ -19,7 +19,7 @@ This can then be used in an automated build
 ## Included Tools
 
 * awscli
-* terraform (0.7)
+* terraform (0.9.6)
 * ansible - optional, you can rebuild though easily. Just uncomment in DockerMake.yml and make
 * bats
 * git/mercurial

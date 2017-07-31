@@ -6,7 +6,7 @@ FROM artifactory.corp.code42.com:5000/gliderlabs/alpine:3.3
 #Commands for devbase
 RUN apk add --update --no-cache \
     ca-certificates curl wget make bash openssh-client \
-    bash git sshpass rsync
+    bash git sshpass rsync jq
 
 
 #Commands for python
@@ -24,27 +24,11 @@ COPY build/aws/aws_bash_helpers.sh /root/.bashrc
 
 
 #Commands for terraform
-ARG TERRAFORM_VERSION=0.9.6
+ARG TERRAFORM_VERSION=0.9.11
 RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin && \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
-
-
-#Commands for ansible
-ARG TERRAFORM_INVENTORY_VERSION=v0.6.1
-ENV PATH /ansible/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
-ENV PYTHONPATH /ansible/lib
-ENV ANSIBLE_LIBRARY /ansible/library
-
-RUN apk --no-cache add --update -t deps git gcc make musl-dev libxml2-dev \
-    libxslt-dev openssl-dev libffi-dev
-RUN pip install ansible ansible-vault
-
-RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inventory/releases/download/$TERRAFORM_INVENTORY_VERSION/terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
-    && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
-    && chmod 755 terraform-inventory && mv terraform-inventory $ANSIBLE_LIBRARY/ && rm terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip
-RUN apk del --purge deps;
 
 
 #Commands for testing
@@ -72,7 +56,24 @@ COPY ./build/templates /opt/cloud-workstation/templates
 RUN  chmod 755 /usr/local/bin/*
 
 
+#Commands for ansible
+ARG TERRAFORM_INVENTORY_VERSION=v0.6.1
+ENV PATH /ansible/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
+ENV PYTHONPATH /ansible/lib
+ENV ANSIBLE_LIBRARY /ansible/library
+
+RUN apk --no-cache add --update -t deps git gcc make musl-dev libxml2-dev \
+    libxslt-dev openssl-dev libffi-dev
+RUN pip install ansible ansible-vault awscurl molecule
+
+RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inventory/releases/download/$TERRAFORM_INVENTORY_VERSION/terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
+    && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
+    && chmod 755 terraform-inventory && mv terraform-inventory $ANSIBLE_LIBRARY/ && rm terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip
+RUN apk del --purge deps;
+
+
 #Commands for cloud-workstation
 WORKDIR /workspace
 CMD /bin/bash
+RUN apk add docker
 
