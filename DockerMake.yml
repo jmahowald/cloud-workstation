@@ -76,6 +76,11 @@ direnv:
     COPY build/direnv/direnv_helpers.sh /root/.bashrc
 
 
+scaffolding:
+  requires:
+  - dockerize
+  - direnv
+  - clitools
 cloud-workstation:
   requires:
     - awscli
@@ -83,8 +88,9 @@ cloud-workstation:
     - testing
     - dockerize
     - direnv
-    - clitools
     - ansible
+    - clitools
+
 
 # TODO this build stuff should actually be in devbase, but I don't want to rebuild right now
   build: |

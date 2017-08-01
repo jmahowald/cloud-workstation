@@ -51,12 +51,6 @@ RUN wget -O direnv  https://github.com/direnv/direnv/releases/download/$DIRENV_V
 COPY build/direnv/direnv_helpers.sh /root/.bashrc
 
 
-#Commands for clitools
-COPY ./build/scripts/*  /usr/local/bin/ 
-COPY ./build/templates /opt/cloud-workstation/templates
-RUN  chmod 755 /usr/local/bin/*
-
-
 #Commands for ansible
 ARG TERRAFORM_INVENTORY_VERSION=v0.6.1
 ENV PATH /ansible/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
@@ -71,6 +65,12 @@ RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inven
     && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
     && chmod 755 terraform-inventory && mv terraform-inventory $ANSIBLE_LIBRARY/ && rm terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip
 RUN apk del --purge deps;
+
+
+#Commands for clitools
+COPY ./build/scripts/*  /usr/local/bin/ 
+COPY ./build/templates /opt/cloud-workstation/templates
+RUN  chmod 755 /usr/local/bin/*
 
 
 #Commands for cloud-workstation

@@ -6,17 +6,22 @@ Uses dockerize to process template directories and generate files for project ty
  For instance, will generate .travis.yml and 
 Jenkinsfile for docker projects
 
+dockerscript will generate a shell script that you can use to launch your images
+with the appropriate mappings
+
 
 Usage:
-  scaffolding docker [--registry=<registry>]  [--outdir=<dir>] <image> 
+  scaffolding dockerproj [--registry=<registry>]  [--outdir=<dir>] <image> 
+  scaffolding dockerscript  [-v VOLUMES] [-e ENV_VARS] [-w WORKING_DIR]  <image> 
 
 Options:
-   -o --outdir=<dir>  where to put the generated files> [default: .]
-   -t --templatedir=<dir> where to load the templates from (ignores builtintype)
-   -r --registry=<reg> registry to upload to [default: hub.docker.com]
+   -o --outdir=<dir>      where to put the generated files> [default: .]
+   -e --envvars ENVVARS comma separated list of environment variables to map
+   -v --volumes VOLUMES  comma separated list if volume mounts over and above any working dire
+   -w --working_dir WORKING_DIR  what is the working dir of the container [default: /workspace]
+   -r --registry registry to upload to
 Arguments:
   image  the name of the image
-  registry the name of the remote registry
 
 """
 
@@ -42,13 +47,24 @@ def execute(cmd,env):
 
 if __name__ == '__main__':
     opts = docopt(__doc__, version='scaffolding 1.0')
-    print(opts)
+#    print(opts)
     my_env = os.environ.copy()
     my_env['IMAGE_NAME'] = opts['<image>']
-    if opts['--registry']:
-      my_env['DOCKER_REGISTRY']=opts['--registry']
+
+    # Get the image name sans the registry
+    image_base_name = my_env['IMAGE_NAME'].split("/")[-1]
     outdir = opts['--outdir']
-    cmd = ['dockerize', "-template","/opt/cloud-workstation/templates/docker:%s" % outdir ] 
+    if opts['dockerscript']:
+      my_env['VOLUMES'] = opts['--volumes'] if opts['--volumes'] else ''
+      my_env['ENV_VARS'] = opts['--envvars'] if opts['--envvars'] else ''
+      my_env['WORKDIR'] = opts['--working_dir'] if opts['--working_dir'] else ''
+
+      cmd = ['dockerize', "-template","/opt/cloud-workstation/templates/launch-docker.sh:%s/%s.sh" % (outdir, image_base_name) ] 
+
+    if opts['dockerproj']:
+      if opts['--registry']:
+        my_env['DOCKER_REGISTRY']=opts['--registry']
+      cmd = ['dockerize', "-template","/opt/cloud-workstation/templates/docker:%s" % outdir ] 
     execute(cmd,my_env)
 
 
