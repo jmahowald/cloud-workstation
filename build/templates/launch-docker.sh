@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Override the image name used for local development 
-IMAGE_NAME=${PIPELINE_IMAGE:-{{.Env.IMAGE_NAME}}}
+IMAGE_NAME=${IMAGE_NAME:-{{.Env.IMAGE_NAME}}}
 
 docker run -it --rm \
     {{ if not .Env.WORKDIR -}}
@@ -15,6 +15,6 @@ docker run -it --rm \
     {{end -}}
     {{- end -}}
     {{ range $index, $value := split (default .Env.ENV_VARS "") "," -}}
-    -e {{$value}}:{{$value}} \
+    -e {{$value}}:${{$value}} \
     {{end -}}
     $IMAGE_NAME $@
