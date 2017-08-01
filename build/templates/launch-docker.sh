@@ -15,6 +15,6 @@ docker run -it --rm \
     {{end -}}
     {{- end -}}
     {{ range $index, $value := split (default .Env.ENV_VARS "") "," -}}
-    -e {{$value}}:${{$value}} \
+    -e {{$value}}=${{$value}} \
     {{end -}}
     $IMAGE_NAME $@
