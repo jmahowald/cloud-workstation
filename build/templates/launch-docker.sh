@@ -3,6 +3,12 @@
 # Override the image name used for local development 
 IMAGE_NAME=${IMAGE_NAME:-{{.Env.IMAGE_NAME}}}
 
+if [[ $1 == '--update' ]] 
+    echo "updating underlying image"
+    docker pull $IMAGE_NAME
+fi  
+
+
 docker run -it --rm \
     {{ if not .Env.WORKDIR -}}
     {{- else -}}

@@ -74,7 +74,7 @@ RUN  chmod 755 /usr/local/bin/*
 ARG ARGBASH_VERSION=2.4.0
 RUN apk --no-cache add autoconf
 RUN mkdir -p /tmp/argash && wget -P /tmp/argbash https://github.com/matejak/argbash/archive/${ARGBASH_VERSION}.zip && \
-  cd /tmp/argbash && unzip ${ARGBASH_VERSION} && cd argbash-${ARGBASH_VERSION}/resources && make install PREFIX=/usr/bin
+  cd /tmp/argbash && unzip ${ARGBASH_VERSION} && cd argbash-${ARGBASH_VERSION}/resources && make install PREFIX=/usr
 
 
 #Commands for cloud-workstation
