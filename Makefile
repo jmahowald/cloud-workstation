@@ -1,6 +1,9 @@
 
 REMOTE_NAME ?= joshmahowald/cloud-workstation
+
 IMAGE_NAME ?= cloud-workstation
+SCAFFOLD_CMD ?= docker run -v $(shell pwd):/workspace $(DOCKER_REMOTE_BASE)cloud-workstation scaffolding
+
 .PHONY: image push
 
 all: image
@@ -20,5 +23,6 @@ Dockerfile: DockerMake.yml
 	./docker-make.sh -n cloud-workstation
 	mv docker_makefiles/Dockerfile.cloud-workstation Dockerfile
 
-cloud-workstation.sh:
-	
+cloud-workstation.sh: image
+	$(SCAFFOLD_CMD) dockerscript -v $(VOLUMES) -e $(ENV_VARS) -w /workspace $(DOCKER_REMOTE_BASE)$(IMAGE_NAME)
+	chmod 755 cloud-workstation.sh
