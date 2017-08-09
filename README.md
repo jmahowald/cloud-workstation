@@ -28,6 +28,7 @@ This can then be used in an automated build
 
 * awskey - tool to idempotently create key aws keys and the corresponding files
 * scaffolding - tool to help generate new projects
+* tfremote - tool to aid in consistently setting up terraform remote state
 
 ```
 scaffolding   A homeless man's version of maven archetype.  
@@ -53,6 +54,22 @@ Arguments:
   image  the name of the image
 ```
 
+```
+setups terraform remote state bucket and environment in one go
+Usage: tfremote [-n|--name <arg>] [-e|--env <arg>] [-r|--remote-bucket-region <arg>] [-f|--(no-)force] [-h|--help] <remote-bucket>
+        <remote-bucket>: Where to store the state information
+        -n,--name: the name of the terraform layer, if you're running this in a docker container, you can supply an enviornmnet variableof CUR_DIR_NAME  (no default)
+        -e,--env: dev/qa/etc (default: 'default')
+        -r,--remote-bucket-region: what region is the bucket in, defaults to current (default: '
+        ')
+        -f,--force,--no-force: whether to force reinitialization of terraform. Useful when switching terraform environments  (off by default)
+        -h,--help: Prints help
+```
+
+Example:
+
+`workstation tfremote -n iam-roles terraform.dev.cd.code42.com` this would do a terraform init into the s3 bucket 
+so that the given project would keep it's remote state in s3://terraform.dev.cd.code42.com/iam-roles/terraform.tfstate
 
 ## Using
-Copy cloud-workstation.sh to your path directory and make it executable. 
+Copy cloud-workstation.sh to your path directory and make it executable, name it workstation
