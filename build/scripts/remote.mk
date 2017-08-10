@@ -13,4 +13,4 @@ LAYER_NAME ?= $CUR_DIR_NAME
 	-backend-config="key=$(LAYER_NAME)/terraform.tfstate" \
 	-backend-config="region=$(REMOTE_STATE_BUCKET_REGION)" && \
 	terraform env select $(ENV_NAME) || terraform env new $(ENV_NAME)
-	echo "remote state initialized with $(REMOTE_STATE_BUCKET) and $*" > $@len
+	echo "remote state initialized with $(REMOTE_STATE_BUCKET)" 

@@ -26,7 +26,7 @@ fi
 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-set_ENV_NAME=$_arg_env REMOTE_STATE_BUCKET=$_arg_remote_bucket \
+ENV_NAME=$_arg_env REMOTE_STATE_BUCKET=$_arg_remote_bucket \
     REMOTE_STATE_BUCKET_REGION=$_arg_remote_bucket_region LAYER_NAME=$arg_name make -f $SCRIPT_DIR/remote.mk  $MAKE_FORCE
 
 

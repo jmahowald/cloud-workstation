@@ -72,12 +72,14 @@ ARG ARGBASH_VERSION=2.4.0
 RUN apk --no-cache add autoconf
 RUN mkdir -p /tmp/argash && wget -P /tmp/argbash https://github.com/matejak/argbash/archive/${ARGBASH_VERSION}.zip && \
   cd /tmp/argbash && unzip ${ARGBASH_VERSION} && cd argbash-${ARGBASH_VERSION}/resources && make install PREFIX=/usr
-
 # don't use a container for processing through argbash
 ENV ARGBASH_CMD argbash
 COPY ./build/   /opt/cloud-workstation
 RUN  make -C /opt/cloud-workstation/helpers \
-  && chmod 755 /opt/cloud-workstation/scripts/* && cp /opt/cloud-workstation/scripts/* /usr/local/bin
+  && cp /opt/cloud-workstation/scripts/* /usr/local/bin
+COPY docker-entrypoint.sh /usr/local/bin
+RUN  chmod 755 /usr/local/bin/*
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 
 #Commands for cloud-workstation
