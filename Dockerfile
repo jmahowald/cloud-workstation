@@ -64,22 +64,25 @@ RUN pip install ansible ansible-vault awscurl molecule
 RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inventory/releases/download/$TERRAFORM_INVENTORY_VERSION/terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
     && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
     && chmod 755 terraform-inventory && mv terraform-inventory $ANSIBLE_LIBRARY/ && rm terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip
-RUN apk del --purge deps;
+RUN apk del --purge deps; 
 
 
-#Commands for formterra
-ENV FORMTERRA_VERSION pre-release
-RUN wget -O formterra https://github.com/jmahowald/formterra/releases/download/$FORMTERRA_VERSION/linux_amd64_formterra \
-  && chmod 755 formterra && mv formterra /usr/local/bin 
-
-
-#Commands for clitools
+#Commands for argbash
 ARG ARGBASH_VERSION=2.4.0
 RUN apk --no-cache add autoconf
 RUN mkdir -p /tmp/argash && wget -P /tmp/argbash https://github.com/matejak/argbash/archive/${ARGBASH_VERSION}.zip && \
   cd /tmp/argbash && unzip ${ARGBASH_VERSION} && cd argbash-${ARGBASH_VERSION}/resources && make install PREFIX=/usr
 # don't use a container for processing through argbash
 ENV ARGBASH_CMD argbash
+
+
+#Commands for formterra
+ENV FORMTERRA_VERSION pre-release
+RUN wget -O formterra https://github.com/jmahowald/formterra/releases/download/$FORMTERRA_VERSION/linux_386_formterra \
+  && chmod 755 formterra && mv formterra /usr/local/bin 
+
+
+#Commands for clitools
 COPY ./build/   /opt/cloud-workstation
 RUN  make -C /opt/cloud-workstation/helpers \
   && cp /opt/cloud-workstation/scripts/* /usr/local/bin
