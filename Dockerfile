@@ -1,6 +1,6 @@
 #Build directory: None
 #tag: cloud-workstation
-FROM artifactory.corp.code42.com:5000/gliderlabs/alpine:3.3
+FROM gliderlabs/alpine:3.3
 
 
 #Commands for devbase
@@ -65,6 +65,12 @@ RUN mkdir -p $ANSIBLE_LIBRARY && wget https://github.com/adammck/terraform-inven
     && unzip terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip \
     && chmod 755 terraform-inventory && mv terraform-inventory $ANSIBLE_LIBRARY/ && rm terraform-inventory_${TERRAFORM_INVENTORY_VERSION}_linux_amd64.zip
 RUN apk del --purge deps;
+
+
+#Commands for formterra
+ENV FORMTERRA_VERSION pre-release
+RUN wget -O formterra https://github.com/jmahowald/formterra/releases/download/$FORMTERRA_VERSION/linux_amd64_formterra \
+  && chmod 755 formterra && mv formterra /usr/local/bin 
 
 
 #Commands for clitools

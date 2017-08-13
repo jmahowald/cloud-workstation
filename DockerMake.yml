@@ -1,5 +1,5 @@
 devbase:
- FROM: artifactory.corp.code42.com:5000/gliderlabs/alpine:3.3
+ FROM: gliderlabs/alpine:3.3
  build: |
   RUN apk add --update --no-cache \
       ca-certificates curl wget make bash openssh-client \
@@ -84,7 +84,11 @@ direnv:
       && chmod 755 direnv && mv direnv /usr/local/bin 
     COPY build/direnv/direnv_helpers.sh /root/.bashrc
 
-
+formterra:
+  build: |
+    ENV FORMTERRA_VERSION pre-release
+    RUN wget -O formterra https://github.com/jmahowald/formterra/releases/download/$FORMTERRA_VERSION/linux_amd64_formterra \
+      && chmod 755 formterra && mv formterra /usr/local/bin 
 scaffolding:
   requires:
   - dockerize
@@ -98,6 +102,7 @@ cloud-workstation:
     - dockerize
     - direnv
     - ansible
+    - formterra
     - clitools
 
 
