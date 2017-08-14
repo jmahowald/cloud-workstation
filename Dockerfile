@@ -82,6 +82,11 @@ RUN wget -O formterra https://github.com/jmahowald/formterra/releases/download/$
   && chmod 755 formterra && mv formterra /usr/local/bin 
 
 
+#Commands for ecs
+RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest \
+  && pip install awslogs
+
+
 #Commands for clitools
 COPY ./build/   /opt/cloud-workstation
 RUN  make -C /opt/cloud-workstation/helpers \
