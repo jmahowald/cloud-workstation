@@ -85,15 +85,15 @@ RUN wget -O formterra https://github.com/jmahowald/formterra/releases/download/$
 #Commands for ecs
 RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest \
   && pip install awslogs
+ADD https://raw.githubusercontent.com/jmahowald/assume_role_entrypoint/master/aws_role_entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/aws_role_entrypoint.sh"]
 
 
 #Commands for clitools
 COPY ./build/   /opt/cloud-workstation
 RUN  make -C /opt/cloud-workstation/helpers \
   && cp /opt/cloud-workstation/scripts/* /usr/local/bin
-COPY docker-entrypoint.sh /usr/local/bin
 RUN  chmod 755 /usr/local/bin/*
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 
 #Commands for cloud-workstation
