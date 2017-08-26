@@ -1,0 +1,26 @@
+tag-names:
+  - name: datetime
+    type: datetime
+    value: '%Y%m%d%H%M'
+builds:
+  devbase:
+    context: /
+    dockerfile: Dockerfile.devbase
+    pushes:
+    - on_tag=joshmahowald/docker-devbase:{git_tag}
+  awscli:
+    context: /
+    dockerfile: Dockerfile.awscli
+    rewrite_from: devbase
+    depends_on: devbase
+    pushes:
+      #- 'on_tag=joshmahowald/docker-awscli:{git_tag}'
+      # - 'tag_template={git_branch}''
+
+      # - 'always=jizhilong/docker-make:{fcommitid}'
+      # - 'always=jizhilong/docker-make:{datetime}'
+      # - 'on_branch:master=jizhilong/docker-make:latest'
+    labels:
+      - 'com.dockermake.git.describe={git_describe}'
+    dockerignore:
+      - .git
