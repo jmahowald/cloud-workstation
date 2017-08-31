@@ -7,20 +7,25 @@ builds:
     context: /
     dockerfile: Dockerfile.devbase
     pushes:
-    - on_tag=joshmahowald/docker-devbase:{git_tag}
+    - on_tag=joshmahowald/workstationbase:{git_tag}
   awscli:
     context: /
     dockerfile: Dockerfile.awscli
     rewrite_from: devbase
-    depends_on: devbase
+    depends_on: 
+    - devbase
     pushes:
-      #- 'on_tag=joshmahowald/docker-awscli:{git_tag}'
-      # - 'tag_template={git_branch}''
-
-      # - 'always=jizhilong/docker-make:{fcommitid}'
-      # - 'always=jizhilong/docker-make:{datetime}'
-      # - 'on_branch:master=jizhilong/docker-make:latest'
+      - 'on_tag=joshmahowald/workstation-awscli:{git_tag}'
+      - 'on_branch:master=joshmahowald/workstation-awscli:latest'
     labels:
       - 'com.dockermake.git.describe={git_describe}'
+  terraform:
+    context: /
+    dockerfile: Dockerfile.terraform
+    rewrite_from: awscli
+    depends_on: 
+    - awscli
+    pushes:
+    - 'on_tag=joshmahowald/workstation-aws-terraform:{git_tag}'
     dockerignore:
       - .git
