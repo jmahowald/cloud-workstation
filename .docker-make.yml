@@ -19,13 +19,23 @@ builds:
       - 'on_branch:master=joshmahowald/workstation-awscli:latest'
     labels:
       - 'com.dockermake.git.describe={git_describe}'
-  terraform:
+  hashitools:
     context: /
-    dockerfile: Dockerfile.terraform
+    dockerfile: Dockerfile.hashitools
     rewrite_from: awscli
     depends_on: 
     - awscli
     pushes:
-    - 'on_tag=joshmahowald/workstation-aws-terraform:{git_tag}'
+    - 'on_tag=joshmahowald/workstation-aws-hashitools:{git_tag}'
+    dockerignore:
+      - .git
+  puppetdev:
+    context: /
+    dockerfile: Dockerfile.puppet
+    rewrite_from: hashitools
+    depends_on: 
+    - hashitools
+    pushes:
+    - 'on_tag=joshmahowald/workstation-aws-hashitools-puppetdev:{git_tag}'
     dockerignore:
       - .git
