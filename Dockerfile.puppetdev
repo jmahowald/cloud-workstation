@@ -7,6 +7,7 @@ RUN apk update && apk upgrade && apk   add ruby make
 RUN gem install librarian-puppet || (echo  "ignoring message from rdoc" && type -P librarian-puppet) 
 
 RUN  apk add  -t deps gcc ruby-dev musl-dev \
-   && gem install json || (echo  "ignoring message from rdoc" && (gem list | grep json)) \
+   && gem install json || (echo  "ignoring message from rdoc" && (gem list | grep json)) \ 
+   && gem install puppet || (echo  "ignoring message from rdoc" && type -P puppet) \
    && apk del --purge deps  && rm -rf /var/cache/apk/*
 
