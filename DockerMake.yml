@@ -18,8 +18,9 @@ awscli:
   requires:
     - python
   build: |
-    RUN pip install awscli
-    COPY build/aws/aws_bash_helpers.sh /root/.bashrc
+    RUN pip install awscli && mkdir -p /etc/profile.d
+    COPY build/aws/aws_bash_helpers.sh /etc/profile.d/aws_bash_helpers.sh
+    
 argbash:
   requires:
     - devbase
@@ -80,12 +81,12 @@ dockerize:
       && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
     RUN apk add --no-cache docker && pip install docker-py 
 
-direnv:
-  build: |
-    ENV DIRENV_VERSION v2.11.3
-    RUN wget -O direnv  https://github.com/direnv/direnv/releases/download/$DIRENV_VERSION/direnv.linux-amd64  https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-      && chmod 755 direnv && mv direnv /usr/local/bin 
-    COPY build/direnv/direnv_helpers.sh /root/.bashrc
+# direnv:
+#   build: |
+#     ENV DIRENV_VERSION v2.11.3
+#     RUN wget -O direnv  https://github.com/direnv/direnv/releases/download/$DIRENV_VERSION/direnv.linux-amd64  https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+#       && chmod 755 direnv && mv direnv /usr/local/bin 
+#     COPY build/direnv/direnv_helpers.sh /root/.bashrc
 ecs:
   build: |
     RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest \

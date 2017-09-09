@@ -1,0 +1,7 @@
+FROM joshmahowald/workstation-awscli-hashitools:0.0.3
+
+# This loks stupid.  Installing librarian puppet at least on this version of alppine
+# has a non zero exit code because of rdoc, but it looks like it can be ignored
+# so we alllow that error and verify librarian puppet is installed
+RUN apk update && apk upgrade && apk --no-cache  add ruby 
+RUN gem install librarian-puppet || (echo  "ignoring message from rdoc" && type -P librarian-puppet)

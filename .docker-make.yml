@@ -16,7 +16,7 @@ builds:
     - devbase
     pushes:
       - 'on_tag=joshmahowald/workstation-awscli:{git_tag}'
-      - 'on_branch:master=joshmahowald/workstation-awscli:latest'
+      # - 'on_branch:master=joshmahowald/workstation-awscli:latest'
     labels:
       - 'com.dockermake.git.describe={git_describe}'
   hashitools:
@@ -31,7 +31,7 @@ builds:
       - .git
   puppetdev:
     context: /
-    dockerfile: Dockerfile.puppet
+    dockerfile: Dockerfile.puppetdev
     rewrite_from: hashitools
     depends_on: 
     - hashitools
