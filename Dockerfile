@@ -12,7 +12,7 @@ RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
 
-ARG TERRAGRUNT_VERSION=v0.13.3
+ARG TERRAGRUNT_VERSION=v0.13.23
 RUN wget -O terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64  \
     && chmod 755 terragrunt && mv terragrunt /usr/local/bin 
 
