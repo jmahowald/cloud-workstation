@@ -1,8 +1,0 @@
-FROM gliderlabs/alpine:3.6
-
-
-#Commands for devbase
-RUN apk add --update --no-cache \
-    ca-certificates curl wget make bash openssh-client \
-    bash git sshpass rsync jq
-
