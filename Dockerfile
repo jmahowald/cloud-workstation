@@ -6,7 +6,7 @@ RUN apk add --update --no-cache \
     make git 
     
 FROM base as terraform
-ARG TERRAFORM_VERSION=0.10.8
+ARG TERRAFORM_VERSION=0.11.1
 RUN  wget -P /tmp https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin && \
     rm -rf /tmp/* && \
@@ -17,9 +17,9 @@ RUN wget -O terragrunt https://github.com/gruntwork-io/terragrunt/releases/downl
     && chmod 755 terragrunt && mv terragrunt /usr/local/bin 
 
 # Preload terraform plugins
-COPY terraformrc /root/.terraformrc
-COPY dummy.tf /tmp
-RUN cd /tmp && terraform init
+COPY /terrasetup/terraformrc /root/.terraformrc
+COPY /terrasetup/* /tmp/terraform/
+RUN cd /tmp/terraform && terragrunt init
 
 FROM python:3-alpine as python-base
 RUN pip install virtualenv 
@@ -64,6 +64,7 @@ COPY --from=docker /usr/local/bin/docker /usr/local/bin/
 COPY bash_profile_helpers/* /etc/profile.d/
 RUN chmod 755 /usr/local/bin/*
 
+ENV TERRAFORM_CACHE_DIR /root/.terraform.d/linux_amd64
 WORKDIR /workspace
 ENTRYPOINT ["/bin/bash", "-login"]
 
