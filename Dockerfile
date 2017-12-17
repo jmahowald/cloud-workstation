@@ -16,6 +16,10 @@ ARG TERRAGRUNT_VERSION=v0.13.23
 RUN wget -O terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64  \
     && chmod 755 terragrunt && mv terragrunt /usr/local/bin 
 
+ARG TERAFORM_DOCS=v0.3.0
+RUN wget -O terraform-docs https://github.com/segmentio/terraform-docs/releases/download/$TERAFORM_DOCS/terraform-docs_linux_amd64 \
+  && chmod 755 terraform-docs && mv terraform-docs /usr/local/bin/terraform-docs
+
 # Preload terraform plugins
 COPY /terrasetup/terraformrc /root/.terraformrc
 COPY /terrasetup/* /tmp/terraform/
@@ -57,7 +61,7 @@ COPY --from=ecs  /usr/local/bin/ecs-cli /usr/local/bin
 COPY --from=terraform  /usr/local/bin/terra* /usr/local/bin/
 COPY --from=pytools /opt/workstation/py /opt/workstation/py
 COPY --from=direnv /usr/local/bin/direnv /usr/local/bin
-COPY --from=terraform /root/.terraformrc /root/
+COPY --from=terraform /root/.terraformrc /root/.terraformrc
 COPY --from=terraform /root/.terraform.d/* /root/.terraform.d/
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
 
