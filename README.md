@@ -14,8 +14,7 @@ This can then be used in an automated build
 
 * awscli
 * terraform (0.10.3)
-* packer 
-* ansible - optional, you can rebuild though easily. Just uncomment in DockerMake.yml and make
+* ansible-vault 
 * terragrunt
 * git
 
