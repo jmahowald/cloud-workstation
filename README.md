@@ -13,10 +13,10 @@ This can then be used in an automated build
 ## Included Tools
 
 * awscli
-* terraform (0.10.3)
 * ansible-vault 
-* terragrunt
 * git
+* nodejs
+* direnv
 
 This also has a baked in stash read only user pem file for git pulls
 
@@ -31,4 +31,3 @@ This will drop you into your current working directory.  Please note that if the
 
 This is encapsulated in the script workstation.sh which you can copy to your machine and make available as a script
 
-=
