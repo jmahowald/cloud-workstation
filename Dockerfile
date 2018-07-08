@@ -57,6 +57,8 @@ RUN curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-$DOCKER_VERSI
 
 
 FROM base 
+
+
 COPY --from=ecs  /usr/local/bin/ecs-cli /usr/local/bin
 COPY --from=terraform  /usr/local/bin/terra* /usr/local/bin/
 COPY --from=pytools /opt/workstation/py /opt/workstation/py
@@ -64,6 +66,11 @@ COPY --from=direnv /usr/local/bin/direnv /usr/local/bin
 COPY --from=terraform /root/.terraformrc /root/.terraformrc
 COPY --from=terraform /root/.terraform.d/* /root/.terraform.d/
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
+
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 COPY bash_profile_helpers/* /etc/profile.d/
 RUN chmod 755 /usr/local/bin/*
