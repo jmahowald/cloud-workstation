@@ -23,5 +23,6 @@ RUN curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubunt
 RUN dpkg -i  session-manager-plugin.deb
 
 
+COPY workstation.sh /usr/local/bin
 
 WORKDIR /workspace
