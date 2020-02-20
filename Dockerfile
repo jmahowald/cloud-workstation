@@ -17,7 +17,7 @@ FROM base
 
 RUN pip install awscli awslogs
 COPY --from=terraform  /usr/local/bin/terragrunt /usr/local/bin/
-COPY --from=terraform  /usr/bin/terragrunt /usr/local/bin/
+COPY --from=terraform  /usr/local/bin/terraform /usr/local/bin/
 
 RUN curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
 RUN dpkg -i  session-manager-plugin.deb
